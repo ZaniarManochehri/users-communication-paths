@@ -1,26 +1,10 @@
 html,
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+  color: #fff;
+  font-family: "iranyekan","Helvetica","Arial",sans-serif;
+  font-weight: 400;
+  font-size: 0.8571428571428571rem;
+  line-height: 1.5;
+  background-color: #161B25;
 }
