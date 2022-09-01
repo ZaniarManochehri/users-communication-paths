@@ -1,10 +1,24 @@
+@font-face {
+  font-family: "IRANYekan";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../assets/fonts/ttf/iranyekanwebboldfanum.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANYekan";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/fonts/ttf/iranyekanwebmediumfanum.ttf") format("truetype");
+}
+
 html,
 body {
-  margin: 0;
+  margin: 0 auto;
   color: #fff;
-  font-family: "iranyekan","Helvetica","Arial",sans-serif;
+  font-family: "IRANYekan";
   font-weight: 400;
   font-size: 0.8571428571428571rem;
   line-height: 1.5;
-  background-color: #161B25;
+  background-color: #161b25;
 }

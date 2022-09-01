@@ -22,7 +22,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="fa" dir="rtl">
         <Head>
           <link
             rel="stylesheet"
