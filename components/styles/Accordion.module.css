@@ -1,5 +1,4 @@
 .accordion {
-  background-color: rgb(33, 43, 53);
   padding: 24px;
   border-radius: 16px;
   box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px,
@@ -7,6 +6,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.accordion.light{
+  background-color: #fff,
 }
 
 .title{

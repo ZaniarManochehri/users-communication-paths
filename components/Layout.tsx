@@ -5,6 +5,7 @@ import createCache from "@emotion/cache";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { prefixer } from "stylis";
+import { Header } from "components";
 
 const cacheLtr = createCache({
   key: "muiltr",
@@ -48,10 +49,23 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     [mode]
   );
 
+  const handleChangeDarkMode = () => {
+    setMode(mode === "dark" ? "light" : "dark");
+  };
+
   return (
     <CacheProvider value={isRtl ? cacheRtl : cacheLtr}>
       <ThemeProvider theme={isRtl ? rtlTheme : ltrTheme}>
         <CssBaseline />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 66,
+          }}
+        >
+          <Header handleChangeDarkMode={handleChangeDarkMode} />
+        </div>
         {children}
       </ThemeProvider>
     </CacheProvider>

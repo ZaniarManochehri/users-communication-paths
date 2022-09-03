@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -6,11 +6,20 @@ import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 
 const CssTextField = styled(TextField)({
+  "& .muirtl-px39cz-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
+    {
+      borderColor: "red",
+    },
   "& .muirtl-14s5rfu-MuiFormLabel-root-MuiInputLabel-root": {
     color: "rgb(121, 131, 142)",
   },
+  "& label.Mui-focused.Mui-error": {
+    color: "red",
+    fontFamily: "IRANYekan",
+  },
   "& label.Mui-focused": {
     color: "rgb(255, 168, 46)",
+    fontFamily: "IRANYekan",
   },
   "& .MuiInput-underline:after": {
     borderBottomColor: "rgb(255, 168, 46)",
@@ -39,9 +48,25 @@ type Props = {
     label: { name: string; icon?: React.ReactNode };
   }[];
   width?: string | number;
+  onBlur?: (value: any) => void;
+  textAlign?: "right" | "left";
+  isRequired?: boolean;
+  errorText?: string;
 };
 const Input: React.FC<Props> = (props) => {
-  const { select, label, name, value = "", onChange, options, width } = props;
+  const {
+    select,
+    label,
+    name,
+    value = "",
+    onChange,
+    options,
+    width,
+    onBlur,
+    textAlign = "left",
+    isRequired = false,
+    errorText,
+  } = props;
 
   return (
     <Stack gap={4} width={width}>
@@ -56,8 +81,15 @@ const Input: React.FC<Props> = (props) => {
           value={value}
           style={{ width: "100%" }}
           inputProps={{
-            style: { fontFamily: "IRANYekan", color: "white" },
+            style: {
+              fontFamily: "IRANYekan",
+              color: "white",
+              textAlign,
+              direction: textAlign === "left" ? "ltr" : "rtl",
+            },
           }}
+          onBlur={onBlur}
+          error={isRequired && Boolean(errorText)}
         >
           {options?.map((option) => {
             return (
@@ -71,7 +103,7 @@ const Input: React.FC<Props> = (props) => {
                   }}
                 >
                   {option.label.icon}
-                  {option.label.name}
+                  <span >{option.label.name}</span>
                 </div>
               </MenuItem>
             );

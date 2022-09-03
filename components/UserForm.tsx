@@ -1,10 +1,9 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Input, CustomButton } from "components";
+import { Formik } from "formik";
 
 //icons
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -58,8 +57,8 @@ const UserForm: React.FC<Props> = (props) => {
     },
   ];
 
-  const handleChangeType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setType(event.target.value);
+  const handleChangeType = (value: string) => {
+    setType(value);
   };
 
   const handleRecord = () => {
@@ -77,24 +76,115 @@ const UserForm: React.FC<Props> = (props) => {
     onClose();
   };
 
+  const validUrl = (str: string) => {
+    var pattern = new RegExp(
+      "^(https?:\\/\\/)?" +
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
+        "((\\d{1,3}\\.){3}\\d{1,3}))" +
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+        "(\\?[;&a-z\\d%_.~+=-]*)?" +
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    );
+    return !!pattern.test(str);
+  };
+
   return (
     <Stack padding={2} gap={2}>
       <span>افزودن مسیر های ارتباطی</span>
       <Stack direction="row" gap={1}>
-        <Input
-          select
-          options={types}
-          label="نوع"
-          onChange={handleChangeType}
-          value={type}
-          width="30%"
-        />
-        <Input
-          label="لینک"
-          onChange={(e) => setLinkValue(e.currentTarget.value)}
-          value={linkValue}
-          width="70%"
-        />
+        <Formik
+          initialValues={{ type: "", link: linkValue }}
+          validate={(values) => {
+            setLinkValue(values.link);
+            handleChangeType(values.type);
+            console.log(values.type);
+
+            const errors = { link: "", type: "" };
+            if (values.type === "undefined") {
+              errors.type = "وارد کردن این فیلد اجباری است";
+            }
+            if (!values.link) {
+              errors.link = "وارد کردن این فیلد اجباری است";
+            } else if (values.type !== "undefined" && !values.link) {
+              errors.link = "وارد کردن این فیلد اجباری است";
+            } else if (!validUrl(values.link)) {
+              errors.link = "محتویات این فیلد باید از جنس آدرس اینترنتی باشد";
+            }
+            return errors;
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 400);
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            /* and other goodies */
+          }) => (
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                gap: 16,
+              }}
+            >
+              <Stack width="30%">
+                <Input
+                  select
+                  name="type"
+                  options={types}
+                  label="نوع"
+                  onChange={handleChange}
+                  value={type}
+                  onBlur={handleBlur}
+                  isRequired
+                  errorText={errors.type}
+                />
+                <span
+                  style={{
+                    visibility: errors.type ? "visible" : "hidden",
+                    fontSize: 12,
+                    color: "red",
+                  }}
+                >
+                  {errors.type ? errors.type : "required"}
+                </span>
+              </Stack>
+              <Stack width="70%" style={{ gap: 4 }}>
+                <Input
+                  label="لینک"
+                  name="link"
+                  onChange={handleChange}
+                  value={linkValue}
+                  width="100%"
+                  onBlur={handleBlur}
+                  isRequired
+                  errorText={errors.link}
+                />
+                <span
+                  style={{
+                    visibility: errors.link ? "visible" : "hidden",
+                    fontSize: 12,
+                    color: "red",
+                  }}
+                >
+                  {errors.link ? errors.link : "required"}
+                </span>
+              </Stack>
+            </form>
+          )}
+        </Formik>
       </Stack>
       <Stack direction="row" justifyContent="flex-end" gap={1}>
         <CustomButton
@@ -109,7 +199,7 @@ const UserForm: React.FC<Props> = (props) => {
           onClick={handleRecord}
           variant="contained"
           height={30}
-          disabled={type === "undefined" || !linkValue}
+          disabled={type === "undefined" || !linkValue || !validUrl(linkValue)}
           customColor="#000"
           backgroundColor=" rgb(255, 168, 46)"
         >

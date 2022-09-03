@@ -3,6 +3,7 @@ import styles from "./styles/Accordion.module.css";
 import Stack from "@mui/material/Stack";
 import { CustomButton, UserForm, UserPathItem } from "components";
 import AddIcon from "@mui/icons-material/Add";
+import { useTheme } from "@mui/material/styles";
 
 type Props = {};
 
@@ -13,6 +14,8 @@ type userPathType = {
 type userPathsType = userPathType[];
 
 const Accordion: React.FC<Props> = (props) => {
+  
+  const theme = useTheme();
   const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [userPaths, setUserPaths] = useState<userPathsType>([]);
@@ -22,7 +25,7 @@ const Accordion: React.FC<Props> = (props) => {
   };
 
   return (
-    <Stack className={styles.accordion}>
+    <Stack className={styles.accordion} style={{backgroundColor: theme.palette.mode === "light" ? "#fff" : "rgb(33, 43, 53)"}}>
       <span className={styles.title}>مسیر های ارتباطی</span>
       <Stack alignItems="flex-start">
         <CustomButton

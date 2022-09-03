@@ -12,10 +12,9 @@ export default function Home() {
     { name: "تنظیمات کاربری", link: "http://116.203.243.155:3082/" },
   ];
   return (
-    <Stack alignItems="center" pt={10}>
+    <Stack alignItems="center">
       <Stack style={{ width: "100%", maxWidth: 900 }} spacing={1} gap={6}>
         <Stack spacing={1}>
-          <Header />
           <Breadcrumb breadList={breadList} />
         </Stack>
         <Accordion />
