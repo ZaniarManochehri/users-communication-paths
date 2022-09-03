@@ -34,13 +34,17 @@ type Props = {
   name?: string;
   value?: string;
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
-  options?: { value: string; label: { name: string; icon?: React.ReactNode } }[];
+  options?: {
+    value: string;
+    label: { name: string; icon?: React.ReactNode };
+  }[];
+  width?: string | number;
 };
 const Input: React.FC<Props> = (props) => {
-  const { select, label, name, value = "", onChange, options } = props;
+  const { select, label, name, value = "", onChange, options, width } = props;
 
   return (
-    <Stack m={2} gap={4}>
+    <Stack gap={4} width={width}>
       <Box>
         <CssTextField
           label={label}
@@ -50,6 +54,7 @@ const Input: React.FC<Props> = (props) => {
           type="text"
           autoComplete="off"
           value={value}
+          style={{ width: "100%" }}
           inputProps={{
             style: { fontFamily: "IRANYekan", color: "white" },
           }}

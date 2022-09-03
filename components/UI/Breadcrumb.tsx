@@ -21,7 +21,7 @@ const Breadcrumb: React.FC<Props> = ({ breadList }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        fontFamily: 'IRANYekan',
+        fontFamily: "IRANYekan",
         color: "rgb(121, 131, 142)",
       }}
     >

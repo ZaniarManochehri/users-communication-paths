@@ -1,79 +1,61 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./styles/Accordion.module.css";
 import Stack from "@mui/material/Stack";
-import { CustomButton, Input } from "components";
+import { CustomButton, UserForm, UserPathItem } from "components";
 import AddIcon from "@mui/icons-material/Add";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TelegramIcon from "@mui/icons-material/Telegram";
-import LinkedinIcon from "@mui/icons-material/Linkedin";
-import PublicIcon from "@mui/icons-material/Public";
 
 type Props = {};
 
+type userPathType = {
+  link: string;
+  type: string;
+};
+type userPathsType = userPathType[];
+
 const Accordion: React.FC<Props> = (props) => {
-  const [type, setType] = useState<string>("undefined1");
-  const types = [
-    {
-      value: "undefined1",
-      label: { name: "undefined2" },
-    },
-    {
-      value: "Twitter",
-      label: { name: "تویتر", icon: <TwitterIcon /> },
-    },
-    {
-      value: "Instagram",
-      label: { name: "اینستاگرام", icon: <InstagramIcon /> },
-    },
-    {
-      value: "Facebook",
-      label: { name: "فیسبوک", icon: <FacebookIcon /> },
-    },
-    {
-      value: "Telegram",
-      label: { name: "تلگرام", icon: <TelegramIcon /> },
-    },
-    {
-      value: "Linkedin",
-      label: { name: "لینکدین", icon: <LinkedinIcon /> },
-    },
-    {
-      value: "Web",
-      label: { name: "وبسایت", icon: <PublicIcon /> },
-    },
-  ];
-  const handleChangeType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setType(event.target.value);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [userPaths, setUserPaths] = useState<userPathsType>([]);
+
+  const setUserPath = ({ link, type }: userPathType) => {
+    setUserPaths([...userPaths, { link, type }]);
   };
+
   return (
     <Stack className={styles.accordion}>
-      <span>مسیر های ارتباطی</span>
+      <span className={styles.title}>مسیر های ارتباطی</span>
       <Stack alignItems="flex-start">
-        <CustomButton color="white" StartIcon={<AddIcon />}>
+        <CustomButton
+          onClick={() => setOpen(true)}
+          customColor="rgb(121, 131, 142)"
+          fontSize={12}
+          StartIcon={<AddIcon />}
+        >
           افزودن مسیر ارتباطی
         </CustomButton>
       </Stack>
-      <Stack className={styles.content}>
-        <span>افزودن مسیر های ارتباطی</span>
-        <Stack>
-          <Input
-            select
-            options={types}
-            label="نوع"
-            onChange={handleChangeType}
-            value={type}
-          />
-          <Input
-            label="لینک"
-            onChange={() => {}}
-            value={"type"}
-          />
-        </Stack>
+      <Stack
+        ref={contentRef}
+        className={styles.content}
+        style={{
+          height: open ? contentRef.current?.scrollHeight : 0,
+        }}
+      >
+        <UserForm
+          onClose={() => setOpen(false)}
+          setUserPath={(userPath: userPathType) => setUserPath(userPath)}
+        />
       </Stack>
+      {userPaths?.map((item, index) => (
+        <React.Fragment key={index}>
+          <UserPathItem
+            item={item}
+            onDelete={(item: userPathType) =>
+              setUserPaths(userPaths.filter((ele) => ele.link !== item.link))
+            }
+          />
+        </React.Fragment>
+      ))}
     </Stack>
   );
 };

@@ -20,6 +20,9 @@ body {
   font-weight: 400;
   font-size: 0.8571428571428571rem;
   line-height: 1.5;
-  background-color: #161b25;
 }
 
+h6,
+span {
+  font-family: "IRANYekan";
+}

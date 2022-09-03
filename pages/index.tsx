@@ -18,7 +18,7 @@ export default function Home() {
           <Header />
           <Breadcrumb breadList={breadList} />
         </Stack>
-        <Accordion ></Accordion>
+        <Accordion></Accordion>
       </Stack>
     </Stack>
   );
