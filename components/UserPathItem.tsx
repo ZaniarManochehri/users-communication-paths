@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { CustomButton, CustomDialog, Input, UserForm } from "components";
 import styles from "./styles/UserPathItem.module.css";
+import { useTheme } from "@mui/material/styles";
 
 //icons
 import TextField from "@mui/material/TextField";
@@ -25,6 +26,7 @@ type userPathType = {
 };
 
 const UserPathItem: React.FC<Props> = ({ item, onDelete }) => {
+  const theme = useTheme();
   const { link, type } = item;
 
   let title = "";
@@ -75,8 +77,15 @@ const UserPathItem: React.FC<Props> = ({ item, onDelete }) => {
   const handleDelete = () => {
     setShowDeleteDialog(true);
   };
+  
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{
+        backgroundColor:
+          theme.palette.mode === "dark" ? "rgb(52, 61, 72)" : "rgb(244, 246, 248)",
+      }}
+    >
       <div className={styles.item}>
         <div className={styles.section}>
           {icon}

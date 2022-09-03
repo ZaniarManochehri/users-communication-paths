@@ -14,7 +14,6 @@ type userPathType = {
 type userPathsType = userPathType[];
 
 const Accordion: React.FC<Props> = (props) => {
-  
   const theme = useTheme();
   const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -25,7 +24,13 @@ const Accordion: React.FC<Props> = (props) => {
   };
 
   return (
-    <Stack className={styles.accordion} style={{backgroundColor: theme.palette.mode === "light" ? "#fff" : "rgb(33, 43, 53)"}}>
+    <Stack
+      className={styles.accordion}
+      style={{
+        backgroundColor:
+          theme.palette.mode === "light" ? "#fff" : "rgb(33, 43, 53)",
+      }}
+    >
       <span className={styles.title}>مسیر های ارتباطی</span>
       <Stack alignItems="flex-start">
         <CustomButton
@@ -42,6 +47,10 @@ const Accordion: React.FC<Props> = (props) => {
         className={styles.content}
         style={{
           height: open ? contentRef.current?.scrollHeight : 0,
+          backgroundColor:
+            theme.palette.mode === "dark"
+              ? "rgb(52, 61, 72)"
+              : "rgb(244, 246, 248)",
         }}
       >
         <UserForm

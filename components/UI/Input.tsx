@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 
 const CssTextField = styled(TextField)({
@@ -54,6 +54,7 @@ type Props = {
   errorText?: string;
 };
 const Input: React.FC<Props> = (props) => {
+  const theme = useTheme();
   const {
     select,
     label,
@@ -68,10 +69,11 @@ const Input: React.FC<Props> = (props) => {
     errorText,
   } = props;
 
+  const MyComponent = theme.palette.mode === "dark" ? CssTextField : TextField;
   return (
     <Stack gap={4} width={width}>
       <Box>
-        <CssTextField
+        <MyComponent
           label={label}
           select={select}
           name={name}
@@ -108,7 +110,7 @@ const Input: React.FC<Props> = (props) => {
               </MenuItem>
             );
           })}
-        </CssTextField>
+        </MyComponent>
       </Box>
     </Stack>
   );

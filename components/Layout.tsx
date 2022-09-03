@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { prefixer } from "stylis";
 import { Header } from "components";
 
+
 const cacheLtr = createCache({
   key: "muiltr",
 });
@@ -19,12 +20,11 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
-const ColorModeContext = React.createContext({ Layout: () => {} });
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isRtl, setIsRtl] = React.useState(true);
   const [mode, setMode] = React.useState<"light" | "dark">("dark");
   React.useLayoutEffect(() => {
-    // document.body.setAttribute("dir", isRtl ? "rtl" : "ltr");
+    document.body.setAttribute("dir", isRtl ? "rtl" : "ltr");
   }, [isRtl]);
 
   const ltrTheme = React.useMemo(
@@ -53,6 +53,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setMode(mode === "dark" ? "light" : "dark");
   };
 
+  const handleChangeLang = (val: boolean) => {
+    setIsRtl(val);
+  };
+
   return (
     <CacheProvider value={isRtl ? cacheRtl : cacheLtr}>
       <ThemeProvider theme={isRtl ? rtlTheme : ltrTheme}>
@@ -64,7 +68,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             marginTop: 66,
           }}
         >
-          <Header handleChangeDarkMode={handleChangeDarkMode} />
+          <Header
+            handleChangeDarkMode={handleChangeDarkMode}
+            handleChangeLang={handleChangeLang}
+          />
         </div>
         {children}
       </ThemeProvider>

@@ -8,10 +8,6 @@
   gap: 16px;
 }
 
-.accordion.light{
-  background-color: #fff,
-}
-
 .title{
   font-size: 12px;
   color: rgb(121, 131, 142);
@@ -19,7 +15,6 @@
 }
 
 .content {
-  background-color: rgb(52, 61, 72);
   border-radius: 16px;
   display: flex;
   flex-direction: column;
