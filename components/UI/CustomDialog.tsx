@@ -10,11 +10,19 @@ type Props = {
   title: string;
   content: React.ReactNode;
   onClose: () => void;
-  onAccept: () => void;
+  onAccept?: () => void;
+  defaultButtons?: boolean;
 };
 
 const CustomDialog: React.FC<Props> = (props) => {
-  const { show, title, content, onClose, onAccept } = props;
+  const {
+    show,
+    title,
+    content,
+    onClose,
+    onAccept,
+    defaultButtons = true,
+  } = props;
 
   const handleAccept = () => {
     onAccept();
@@ -32,25 +40,27 @@ const CustomDialog: React.FC<Props> = (props) => {
           <span>{title}</span>
         </DialogTitle>
         <DialogContent>{content}</DialogContent>
-        <DialogActions sx={{ padding: "0 24px 24px 0" }}>
-          <CustomButton
-            height={30}
-            variant="outlined"
-            customColor="rgb(255, 168, 46)"
-            onClick={onClose}
-          >
-            انصراف
-          </CustomButton>
-          <CustomButton
-            height={30}
-            customColor="#000"
-            variant="contained"
-            backgroundColor="rgb(255, 168, 46)"
-            onClick={handleAccept}
-          >
-            حذف
-          </CustomButton>
-        </DialogActions>
+        {defaultButtons && (
+          <DialogActions sx={{ padding: "0 24px 24px 0" }}>
+            <CustomButton
+              height={30}
+              variant="outlined"
+              customColor="rgb(255, 168, 46)"
+              onClick={onClose}
+            >
+              انصراف
+            </CustomButton>
+            <CustomButton
+              height={30}
+              customColor="#000"
+              variant="contained"
+              backgroundColor="rgb(255, 168, 46)"
+              onClick={handleAccept}
+            >
+              حذف
+            </CustomButton>
+          </DialogActions>
+        )}
       </Dialog>
     </div>
   );
