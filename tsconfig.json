@@ -32,7 +32,7 @@
     "components/**/*.ts",
     "components/**/*.tsx",
     "components/index.d.ts"
-  ],
+, "services/server.js"  ],
   "exclude": [
     "node_modules"
   ]

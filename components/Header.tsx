@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CustomButton } from "components";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -14,10 +14,23 @@ type Props = {
 };
 
 const Header: React.FC<Props> = (props) => {
-  const { t, i18n, ready } = useTranslation();
-  i18n.changeLanguage("en");
+  const { t } = useTranslation();
+
+  const [texts, setTexts] = useState({
+    title: "",
+  });
+
+  const updateTexts = (key: string, value: string) => {
+    setTexts({ ...texts, [key]: value });
+  };
+
   const { handleChangeDarkMode, handleChangeLang } = props;
   const theme = useTheme();
+
+  useEffect(() => {
+    updateTexts("title", t("USER_SETTINGS"));
+  }, [theme.direction]);
+
   return (
     <Stack
       direction="row"
@@ -26,17 +39,24 @@ const Header: React.FC<Props> = (props) => {
       maxWidth={900}
       width="100%"
     >
-      {/* <h6 className={styles.title}>{t("USER_SETTINGS")}</h6> */}
-      <h6 className={styles.title}>{"USER_SETTINGS"}</h6>
+      <h6 className={styles.title}>{texts.title}</h6>
       <Stack direction="row" gap={1}>
         <CustomButton
-          customColor="rgb(121, 131, 142)"
+          customColor={
+            theme.direction === "rtl"
+              ? "rgb(121, 131, 142)"
+              : "rgb(255, 168, 46)"
+          }
           onClick={() => handleChangeLang(false)}
         >
           ENGLISH
         </CustomButton>
         <CustomButton
-          customColor="rgb(255, 168, 46)"
+          customColor={
+            theme.direction === "rtl"
+              ? "rgb(255, 168, 46)"
+              : "rgb(121, 131, 142)"
+          }
           onClick={() => handleChangeLang(true)}
         >
           فارسی

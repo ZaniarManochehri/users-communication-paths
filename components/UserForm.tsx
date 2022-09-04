@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import { Input, CustomButton } from "components";
 import { Formik } from "formik";
+import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 //icons
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -20,12 +22,48 @@ type Props = {
   setUserPath: (userPath: userPathType) => void;
   data?: userPathType;
   isEdit?: boolean;
+  socials: userPathType[];
 };
 
 const UserForm: React.FC<Props> = (props) => {
-  const { onClose, setUserPath, data, isEdit } = props;
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const { onClose, setUserPath, data, isEdit, socials } = props;
   const [type, setType] = useState<string>(isEdit ? data.type : "undefined");
   const [linkValue, setLinkValue] = useState<string>(isEdit ? data.link : "");
+  const [hasInputError, setHasInputError] = useState(false);
+  const [texts, setTexts] = useState({
+    addSocial: "",
+    instagram: "",
+    twitter: "",
+    telegram: "",
+    web: "",
+    facebook: "",
+    linkedin: "",
+  });
+
+  useEffect(() => {
+    updateTexts({
+      addSocial: t("ADD_SOCIAL"),
+      instagram: t("INSTAGRAM"),
+      twitter: t("TWITTER"),
+      telegram: t("TELEGRAM"),
+      web: t("WEB"),
+      facebook: t("FACEBOOK"),
+      linkedin: t("LINKEDIN"),
+    });
+  }, [theme.direction]);
+
+  const updateTexts = (obj: any) => {
+    let mObj = { ...texts };
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        mObj = { ...mObj, [key]: obj[key] };
+      }
+    }
+    setTexts(mObj);
+  };
+
   const types = [
     {
       value: "undefined",
@@ -33,27 +71,27 @@ const UserForm: React.FC<Props> = (props) => {
     },
     {
       value: "Twitter",
-      label: { name: "تویتر", icon: <TwitterIcon /> },
+      label: { name: texts.twitter, icon: <TwitterIcon /> },
     },
     {
       value: "Instagram",
-      label: { name: "اینستاگرام", icon: <InstagramIcon /> },
+      label: { name: texts.instagram, icon: <InstagramIcon /> },
     },
     {
       value: "Facebook",
-      label: { name: "فیسبوک", icon: <FacebookIcon /> },
+      label: { name: texts.facebook, icon: <FacebookIcon /> },
     },
     {
       value: "Telegram",
-      label: { name: "تلگرام", icon: <TelegramIcon /> },
+      label: { name: texts.telegram, icon: <TelegramIcon /> },
     },
     {
       value: "Linkedin",
-      label: { name: "لینکدین", icon: <LinkedinIcon /> },
+      label: { name: texts.linkedin, icon: <LinkedinIcon /> },
     },
     {
       value: "Web",
-      label: { name: "وبسایت", icon: <PublicIcon /> },
+      label: { name: texts.web, icon: <PublicIcon /> },
     },
   ];
 
@@ -65,6 +103,8 @@ const UserForm: React.FC<Props> = (props) => {
     const userLink = linkValue;
     const userPath = type;
     setUserPath({ link: userLink, type: userPath });
+    setType("undefined");
+    setLinkValue("");
     onClose();
   };
 
@@ -91,16 +131,18 @@ const UserForm: React.FC<Props> = (props) => {
 
   return (
     <Stack padding={2} gap={2}>
-      <span>افزودن مسیر های ارتباطی</span>
+      <span>{texts.addSocial}</span>
       <Stack direction="row" gap={1}>
         <Formik
           initialValues={{ type: "", link: linkValue }}
           validate={(values) => {
             setLinkValue(values.link);
             handleChangeType(values.type);
-            console.log(values.type);
 
             const errors = { link: "", type: "" };
+            if (socials.find((social) => social.link === values.link)) {
+              errors.link = "مسیر تکراری است";
+            }
             if (values.type === "undefined") {
               errors.type = "وارد کردن این فیلد اجباری است";
             }
@@ -111,6 +153,7 @@ const UserForm: React.FC<Props> = (props) => {
             } else if (!validUrl(values.link)) {
               errors.link = "محتویات این فیلد باید از جنس آدرس اینترنتی باشد";
             }
+            setHasInputError(errors.link !== "" || errors.type !== "");
             return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
@@ -199,7 +242,7 @@ const UserForm: React.FC<Props> = (props) => {
           onClick={handleRecord}
           variant="contained"
           height={30}
-          disabled={type === "undefined" || !linkValue || !validUrl(linkValue)}
+          disabled={type === "undefined" || hasInputError}
           customColor="#000"
           backgroundColor=" rgb(255, 168, 46)"
         >

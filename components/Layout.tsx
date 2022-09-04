@@ -6,7 +6,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { prefixer } from "stylis";
 import { Header } from "components";
-
+import { useTranslation } from "react-i18next";
+import { createServer } from "miragejs";
 
 const cacheLtr = createCache({
   key: "muiltr",
@@ -20,11 +21,17 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t, i18n, ready } = useTranslation();
   const [isRtl, setIsRtl] = React.useState(true);
   const [mode, setMode] = React.useState<"light" | "dark">("dark");
+  const [renderedApp, setRenderedApp] = React.useState<boolean>(false);
+
   React.useLayoutEffect(() => {
     document.body.setAttribute("dir", isRtl ? "rtl" : "ltr");
+    document.body.setAttribute("lang", isRtl ? "fa" : "en");
+    setRenderedApp(true);
   }, [isRtl]);
 
   const ltrTheme = React.useMemo(
@@ -55,7 +62,39 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const handleChangeLang = (val: boolean) => {
     setIsRtl(val);
+    i18n.changeLanguage(val ? "fa" : "en");
   };
+
+  const createVirtualServer = () => {
+    createServer({
+      routes() {
+        this.get("/api/user", () => ({
+          user: {
+            name: "Zaniar Manochehri",
+            socials: [
+              { id: 1, link: "https://test.com", type: "Instagram" },
+              { id: 2, link: "https://test1.com", type: "Telegram" },
+            ],
+          },
+        }));
+    
+        this.post("/api/social", (schema, request) => {
+          let attrs = JSON.parse(request.requestBody);
+          return { social: attrs };
+        });
+    
+        this.delete("/api/social/:id", (schema, request) => {
+          let id = request.params.id;
+          return { socialId: id };
+        });
+      },
+    });
+  }
+
+  useEffect(() => {
+    createVirtualServer()
+  }, [])
+  
 
   return (
     <CacheProvider value={isRtl ? cacheRtl : cacheLtr}>

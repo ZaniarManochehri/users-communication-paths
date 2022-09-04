@@ -77,13 +77,15 @@ const UserPathItem: React.FC<Props> = ({ item, onDelete }) => {
   const handleDelete = () => {
     setShowDeleteDialog(true);
   };
-  
+
   return (
     <div
       className={styles.container}
       style={{
         backgroundColor:
-          theme.palette.mode === "dark" ? "rgb(52, 61, 72)" : "rgb(244, 246, 248)",
+          theme.palette.mode === "dark"
+            ? "rgb(52, 61, 72)"
+            : "rgb(244, 246, 248)",
       }}
     >
       <div className={styles.item}>
@@ -122,6 +124,7 @@ const UserPathItem: React.FC<Props> = ({ item, onDelete }) => {
         }}
       >
         <UserForm
+          socials={[]}
           isEdit
           data={item}
           onClose={() => setOpenForm(false)}
