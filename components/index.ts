@@ -5,3 +5,4 @@ export { default as UserPathItem } from "./UserPathItem";
 export { default as UserForm } from "./UserForm";
 
 export * from "./UI";
+export * from "./slot";

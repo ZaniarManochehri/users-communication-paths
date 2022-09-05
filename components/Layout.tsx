@@ -5,14 +5,18 @@ import createCache from "@emotion/cache";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { prefixer } from "stylis";
-import { CustomButton, CustomDialog, Header } from "components";
 import { useTranslation } from "react-i18next";
 import { createServer } from "miragejs";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import blueGrey from "@material-ui/core/colors/blueGrey";
-import Radio from "@mui/material/Radio";
 import { blue } from "@material-ui/core/colors";
 import purple from "@material-ui/core/colors/purple";
+import {
+  CustomButton,
+  CustomDialog,
+  Header,
+  ColorControlDialog,
+} from "components";
 
 const cacheLtr = createCache({
   key: "muiltr",
@@ -88,8 +92,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         palette: {
           mode,
           background: defaultBg,
-          // primary: deepOrange,
-          // secondary: blueGrey,
+          primary: deepOrange,
+          secondary: blueGrey,
         },
         direction: "rtl",
       }),
@@ -171,10 +175,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         ></button>
         <CustomDialog
           show={showDialogTheme}
-          title="تنظیم تم"
+          title="تنظیمات"
           onClose={() => setShowDialogTheme(false)}
           content={
-            <DialogContent
+            <ColorControlDialog
               onChange={handleChangeThem}
               onClose={() => setShowDialogTheme(false)}
             />
@@ -183,90 +187,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         />
       </ThemeProvider>
     </CacheProvider>
-  );
-};
-
-const DialogContent: React.FC<{
-  onChange: (val: string) => void;
-  onClose: () => void;
-}> = ({ onChange, onClose }) => {
-  const [selectedValue, setSelectedValue] = React.useState("");
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
-    onChange(event.target.value);
-  };
-  const controlProps = (item: string) => ({
-    checked: selectedValue === item,
-    onChange: handleChange,
-    value: item,
-    name: "color-radio-button-demo",
-    inputProps: { "aria-label": item },
-  });
-  return (
-    <div
-      style={{
-        minWidth: 300,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: 8,
-          alignItems: "center",
-        }}
-      >
-        <span>زمینه</span>
-        <Radio
-          {...controlProps("blue")}
-          sx={{
-            color: "blue",
-            "&.Mui-checked": {
-              color: "blue",
-            },
-          }}
-        />
-        <Radio
-          {...controlProps("purple")}
-          color="success"
-          sx={{
-            color: "purple",
-            "&.Mui-checked": {
-              color: "purple",
-            },
-          }}
-        />
-        <Radio
-          {...controlProps("black")}
-          color="default"
-          sx={{
-            color: "black",
-            "&.Mui-checked": {
-              color: "black",
-            },
-          }}
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
-        <CustomButton
-          variant="contained"
-          customColor="#000"
-          backgroundColor="rgb(255, 168, 46)"
-          onClick={onClose}
-        >
-          بستن
-        </CustomButton>
-      </div>
-    </div>
   );
 };
 
